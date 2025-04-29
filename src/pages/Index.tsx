@@ -11,9 +11,18 @@ export default function Index() {
           This interface connects to your n8n chatbot workflow. Each conversation has a unique session ID that helps 
           n8n maintain conversation context.
         </p>
+        <p className="text-sm mb-2">
+          The chat now sends messages in the required format:
+        </p>
+        <pre className="text-xs bg-slate-800 text-white p-2 rounded mb-2 overflow-x-auto">
+{`{
+  "action": "sendMessage",
+  "sessionId": "unique-session-id",
+  "chatInput": "user message"
+}`}
+        </pre>
         <p className="text-sm">
-          If the "Simple Memory" node in n8n shows errors, make sure it's configured to use the "sessionid" parameter 
-          from the incoming webhook request.
+          If you're still experiencing issues, check your n8n workflow configuration.
         </p>
       </div>
       <ChatInterface />

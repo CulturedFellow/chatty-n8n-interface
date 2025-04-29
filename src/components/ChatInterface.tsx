@@ -43,15 +43,19 @@ export function ChatInterface() {
     setLoading(true);
 
     try {
+      // Format the payload according to the n8n workflow expectation
+      const payload = {
+        action: "sendMessage",
+        sessionId: sessionId,
+        chatInput: content
+      };
+
       const response = await fetch("https://n8n.seoengine.agency/webhook/3f19a2fd-4157-4d00-8add-b19b7a31e6ee/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
-          message: content,
-          sessionid: sessionId // Include the session ID in the request
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
