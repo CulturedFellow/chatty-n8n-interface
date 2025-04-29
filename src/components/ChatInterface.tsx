@@ -14,6 +14,10 @@ type Message = {
 export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string>(() => {
+    // Generate a unique session ID when the component is first mounted
+    return crypto.randomUUID();
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -44,7 +48,10 @@ export function ChatInterface() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: content }),
+        body: JSON.stringify({ 
+          message: content,
+          sessionid: sessionId // Include the session ID in the request
+        }),
       });
 
       if (!response.ok) {
@@ -70,11 +77,26 @@ export function ChatInterface() {
     }
   };
 
+  // Add a function to start a new chat session
+  const startNewSession = () => {
+    setSessionId(crypto.randomUUID());
+    setMessages([]);
+    toast.success("Started a new chat session");
+  };
+
   return (
     <div className="flex flex-col h-[80vh] max-w-3xl mx-auto">
-      <div className="bg-card rounded-t-lg p-4 border-b">
-        <h1 className="text-2xl font-bold">SEO Engine AI Chat</h1>
-        <p className="text-muted-foreground">Chat with your AI assistant</p>
+      <div className="bg-card rounded-t-lg p-4 border-b flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">SEO Engine AI Chat</h1>
+          <p className="text-muted-foreground">Chat with your AI assistant</p>
+        </div>
+        <button
+          onClick={startNewSession}
+          className="bg-secondary hover:bg-secondary/80 text-secondary-foreground px-3 py-2 rounded-md text-sm"
+        >
+          New Chat
+        </button>
       </div>
       
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/20">
@@ -83,6 +105,7 @@ export function ChatInterface() {
             <div className="text-center">
               <h2 className="text-xl font-semibold mb-2">Welcome to SEO Engine AI Chat</h2>
               <p className="text-muted-foreground">Ask me anything about SEO!</p>
+              <p className="text-xs mt-4 text-muted-foreground">Session ID: {sessionId.slice(0, 8)}...</p>
             </div>
           </div>
         ) : (
