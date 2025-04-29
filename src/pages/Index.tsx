@@ -12,13 +12,21 @@ export default function Index() {
           n8n maintain conversation context.
         </p>
         <p className="text-sm mb-2">
-          The chat now sends messages in the required format:
+          The chat sends messages in this format:
         </p>
         <pre className="text-xs bg-slate-800 text-white p-2 rounded mb-2 overflow-x-auto">
 {`{
   "action": "sendMessage",
   "sessionId": "unique-session-id",
   "chatInput": "user message"
+}`}
+        </pre>
+        <p className="text-sm mb-2">
+          And expects responses in this format:
+        </p>
+        <pre className="text-xs bg-slate-800 text-white p-2 rounded mb-2 overflow-x-auto">
+{`{
+  "output": "AI response message"
 }`}
         </pre>
         <p className="text-sm">

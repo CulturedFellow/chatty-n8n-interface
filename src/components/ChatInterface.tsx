@@ -63,11 +63,11 @@ export function ChatInterface() {
       }
 
       const data = await response.json();
-
-      // Add assistant message
+      
+      // Add assistant message - using 'output' property instead of 'message'
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
-        content: data.message || "Sorry, I couldn't process your request",
+        content: data.output || "Sorry, I couldn't process your request",
         role: "assistant",
         timestamp: new Date(),
       };
