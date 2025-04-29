@@ -1,6 +1,8 @@
 
 import React from "react";
 import { format } from "date-fns";
+import ReactMarkdown from "react-markdown";
+import { motion } from "framer-motion";
 
 type Message = {
   id: string;
@@ -18,18 +20,27 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-      <div
-        className={`max-w-[80%] rounded-lg px-4 py-2 ${
+      <motion.div
+        className={`max-w-[85%] rounded-lg px-4 py-3 ${
           isUser
-            ? "bg-primary text-primary-foreground"
-            : "bg-card border"
+            ? "bg-blue-600 text-white"
+            : "bg-slate-800 border border-blue-500/20 text-slate-100"
         }`}
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.2 }}
       >
-        <div className="text-sm">{message.content}</div>
+        {isUser ? (
+          <div className="text-sm break-words">{message.content}</div>
+        ) : (
+          <div className="markdown-body text-sm break-words">
+            <ReactMarkdown>{message.content}</ReactMarkdown>
+          </div>
+        )}
         <div className="text-xs mt-1 opacity-70">
           {format(message.timestamp, "HH:mm")}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

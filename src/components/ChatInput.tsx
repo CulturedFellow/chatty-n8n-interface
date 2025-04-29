@@ -1,8 +1,9 @@
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
@@ -13,7 +14,6 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-resize the textarea based on content
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
@@ -40,17 +40,19 @@ export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
         value={message}
         onChange={handleTextareaChange}
         onKeyDown={handleKeyDown}
-        placeholder="Type your message..."
+        placeholder="Ask about SEO optimization..."
         disabled={disabled}
-        className="min-h-[60px] resize-none"
+        className="min-h-[60px] resize-none bg-slate-800 border-blue-500/30 text-slate-100 focus:ring-blue-500 placeholder:text-slate-400"
       />
-      <Button 
-        type="submit" 
-        disabled={disabled || !message.trim()} 
-        className="h-10 w-10 p-0"
-      >
-        <Send className="h-5 w-5" />
-      </Button>
+      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+        <Button 
+          type="submit" 
+          disabled={disabled || !message.trim()} 
+          className="h-10 w-10 p-0 bg-blue-600 hover:bg-blue-500"
+        >
+          <Send className="h-5 w-5" />
+        </Button>
+      </motion.div>
     </form>
   );
 }

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,19 +36,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -96,6 +90,106 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-slate-900 text-foreground;
   }
+}
+
+.markdown-body {
+  @apply text-slate-100;
+}
+
+.markdown-body h1 {
+  @apply text-xl font-bold mt-4 mb-2 text-white;
+}
+
+.markdown-body h2 {
+  @apply text-lg font-bold mt-3 mb-2 text-white;
+}
+
+.markdown-body h3 {
+  @apply text-md font-bold mt-3 mb-1 text-white;
+}
+
+.markdown-body p {
+  @apply my-2;
+}
+
+.markdown-body ul {
+  @apply list-disc pl-6 my-2;
+}
+
+.markdown-body ol {
+  @apply list-decimal pl-6 my-2;
+}
+
+.markdown-body li {
+  @apply mb-1;
+}
+
+.markdown-body a {
+  @apply text-blue-400 hover:text-blue-300 hover:underline;
+}
+
+.markdown-body code {
+  @apply px-1 py-0.5 bg-slate-700 text-blue-300 rounded text-sm;
+}
+
+.markdown-body pre {
+  @apply p-3 bg-slate-800 rounded-md my-3 overflow-auto;
+}
+
+.markdown-body pre code {
+  @apply bg-transparent text-blue-300 p-0;
+}
+
+.markdown-body blockquote {
+  @apply pl-4 border-l-4 border-blue-500 text-slate-300 my-3;
+}
+
+.markdown-body table {
+  @apply w-full border-collapse my-3;
+}
+
+.markdown-body th,
+.markdown-body td {
+  @apply border border-slate-700 p-2;
+}
+
+.markdown-body th {
+  @apply bg-slate-800;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-blue-700 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-blue-600;
+}
+
+/* Animations */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.6);
+  }
+}
+
+.glow-effect {
+  animation: glow 2s infinite;
 }

@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
+import { motion } from "framer-motion";
 
 type Message = {
   id: string;
@@ -89,50 +90,86 @@ export function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-[80vh] max-w-3xl mx-auto">
-      <div className="bg-card rounded-t-lg p-4 border-b flex justify-between items-center">
+    <motion.div 
+      className="flex flex-col h-[80vh] max-w-3xl mx-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div 
+        className="bg-gradient-to-r from-blue-900 to-slate-900 rounded-t-lg p-4 border-b border-blue-500/30 flex justify-between items-center"
+        initial={{ y: -20 }}
+        animate={{ y: 0 }}
+        transition={{ delay: 0.2, type: "spring" }}
+      >
         <div>
-          <h1 className="text-2xl font-bold">SEO Engine AI Chat</h1>
-          <p className="text-muted-foreground">Chat with your AI assistant</p>
+          <h1 className="text-2xl font-bold text-white">SEO Engine AI Bot</h1>
+          <p className="text-blue-300">Your intelligent SEO assistant</p>
         </div>
-        <button
+        <motion.button
           onClick={startNewSession}
-          className="bg-secondary hover:bg-secondary/80 text-secondary-foreground px-3 py-2 rounded-md text-sm"
+          className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          New Chat
-        </button>
-      </div>
+          <span className="hidden sm:inline">New Chat</span>
+        </motion.button>
+      </motion.div>
       
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-muted/20">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-900/95">
         {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
+          <motion.div 
+            className="flex items-center justify-center h-full"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
             <div className="text-center">
-              <h2 className="text-xl font-semibold mb-2">Welcome to SEO Engine AI Chat</h2>
-              <p className="text-muted-foreground">Ask me anything about SEO!</p>
-              <p className="text-xs mt-4 text-muted-foreground">Session ID: {sessionId.slice(0, 8)}...</p>
+              <h2 className="text-2xl font-semibold mb-4 text-white">Welcome to SEO Engine AI Bot</h2>
+              <p className="text-blue-300">Ask me anything about SEO optimization!</p>
+              <div className="flex justify-center mt-8">
+                <div className="flex space-x-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></div>
+                  <div className="w-3 h-3 rounded-full bg-blue-400 animate-pulse" style={{ animationDelay: "0.2s" }}></div>
+                  <div className="w-3 h-3 rounded-full bg-blue-300 animate-pulse" style={{ animationDelay: "0.4s" }}></div>
+                </div>
+              </div>
+              <p className="text-xs mt-8 text-slate-500">Session ID: {sessionId.slice(0, 8)}...</p>
             </div>
-          </div>
+          </motion.div>
         ) : (
-          messages.map((message) => (
-            <ChatMessage key={message.id} message={message} />
+          messages.map((message, index) => (
+            <motion.div
+              key={message.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.3 }}
+            >
+              <ChatMessage message={message} />
+            </motion.div>
           ))
         )}
         {loading && (
-          <div className="flex items-center space-x-2">
+          <motion.div 
+            className="flex items-center space-x-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
             <div className="flex space-x-1">
-              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "0ms" }}></div>
-              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "200ms" }}></div>
-              <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: "400ms" }}></div>
+              <div className="w-2 h-2 rounded-full bg-blue-500 animate-bounce" style={{ animationDelay: "0ms" }}></div>
+              <div className="w-2 h-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: "200ms" }}></div>
+              <div className="w-2 h-2 rounded-full bg-blue-300 animate-bounce" style={{ animationDelay: "400ms" }}></div>
             </div>
-            <span className="text-sm text-muted-foreground">AI is typing...</span>
-          </div>
+            <span className="text-sm text-blue-300">AI is thinking...</span>
+          </motion.div>
         )}
         <div ref={messagesEndRef} />
       </div>
       
-      <div className="p-4 bg-card rounded-b-lg border-t">
+      <div className="p-4 bg-gradient-to-r from-blue-900 to-slate-900 rounded-b-lg border-t border-blue-500/30">
         <ChatInput onSendMessage={handleSendMessage} disabled={loading} />
       </div>
-    </div>
+    </motion.div>
   );
 }
