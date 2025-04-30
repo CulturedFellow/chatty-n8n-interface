@@ -9,13 +9,78 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      clients: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          username: string
+          webhook_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+          username: string
+          webhook_url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          username?: string
+          webhook_url?: string
+        }
+        Relationships: []
+      }
+      user_clients: {
+        Row: {
+          client_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_clients_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_current_client: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          username: string
+          webhook_url: string
+        }
+      }
     }
     Enums: {
       [_ in never]: never

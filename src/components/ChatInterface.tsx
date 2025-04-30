@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
 
 type Message = {
   id: string;
@@ -19,6 +20,7 @@ export function ChatInterface() {
     // Generate a unique session ID when the component is first mounted
     return crypto.randomUUID();
   });
+  const { clientInfo } = useAuth();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -31,6 +33,11 @@ export function ChatInterface() {
 
   const handleSendMessage = async (content: string) => {
     if (!content.trim()) return;
+    
+    if (!clientInfo?.webhook_url) {
+      toast.error("No webhook URL configured for your account");
+      return;
+    }
 
     // Add user message to the chat
     const userMessage: Message = {
@@ -51,7 +58,7 @@ export function ChatInterface() {
         chatInput: content
       };
 
-      const response = await fetch("https://n8n.seoengine.agency/webhook/3f19a2fd-4157-4d00-8add-b19b7a31e6ee/chat", {
+      const response = await fetch(clientInfo.webhook_url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,17 +110,21 @@ export function ChatInterface() {
         transition={{ delay: 0.2, type: "spring" }}
       >
         <div>
-          <h1 className="text-2xl font-bold text-white">SEO Engine AI Bot</h1>
+          <h1 className="text-2xl font-bold text-white">
+            {clientInfo?.name || "SEO Engine AI Bot"}
+          </h1>
           <p className="text-blue-300">Your intelligent SEO assistant</p>
         </div>
-        <motion.button
-          onClick={startNewSession}
-          className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <span className="hidden sm:inline">New Chat</span>
-        </motion.button>
+        <div className="flex items-center gap-2">
+          <motion.button
+            onClick={startNewSession}
+            className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-md text-sm flex items-center gap-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="hidden sm:inline">New Chat</span>
+          </motion.button>
+        </div>
       </motion.div>
       
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-900/95">
@@ -125,7 +136,7 @@ export function ChatInterface() {
             transition={{ delay: 0.3, duration: 0.5 }}
           >
             <div className="text-center">
-              <h2 className="text-2xl font-semibold mb-4 text-white">Welcome to SEO Engine AI Bot</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-white">Welcome to {clientInfo?.name || "SEO Engine AI Bot"}</h2>
               <p className="text-blue-300">Ask me anything about SEO optimization!</p>
               <div className="flex justify-center mt-8">
                 <div className="flex space-x-2">

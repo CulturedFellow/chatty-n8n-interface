@@ -1,1 +1,5 @@
+
 project_id = "uibbfgmtvbdrkuhbmljf"
+
+[functions.admin]
+verify_jwt = true
