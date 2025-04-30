@@ -4,10 +4,14 @@ import { ChatInterface } from "@/components/ChatInterface";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { LogOut } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Index() {
-  const { signOut, clientInfo } = useAuth();
+  const { signOut, clientInfo, user } = useAuth();
+  
+  // Check if user is admin (using email for simplicity)
+  const isAdmin = user?.email?.includes('admin');
 
   return (
     <motion.div 
@@ -23,6 +27,20 @@ export default function Index() {
               Logged in as {clientInfo.name}
             </span>
           )}
+          
+          {isAdmin && (
+            <Link to="/admin">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="text-slate-300 hover:text-white hover:bg-blue-700"
+              >
+                <Settings size={18} className="mr-2" />
+                Admin Panel
+              </Button>
+            </Link>
+          )}
+          
           <Button 
             variant="ghost" 
             size="sm" 
