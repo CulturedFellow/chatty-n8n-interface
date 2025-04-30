@@ -107,7 +107,7 @@
 }
 
 .markdown-body h3 {
-  @apply text-md font-bold mt-3 mb-1 text-white;
+  @apply text-base font-bold mt-3 mb-1 text-white;
 }
 
 .markdown-body p {
