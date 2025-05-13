@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -7,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [emailOrUsername, setEmailOrUsername] = useState("");
   const [password, setPassword] = useState("");
   const { signIn, isLoading, user } = useAuth();
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await signIn(email, password);
+    await signIn(emailOrUsername, password);
   };
 
   return (
@@ -58,14 +57,14 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm text-blue-100 block">
+            <label htmlFor="emailOrUsername" className="text-sm text-blue-100 block">
               Email / Username
             </label>
             <Input
-              id="email"
+              id="emailOrUsername"
               type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={emailOrUsername}
+              onChange={(e) => setEmailOrUsername(e.target.value)}
               placeholder="Enter your username or email"
               required
               className="w-full bg-slate-800 border-blue-500/30 text-white placeholder:text-slate-400 focus:ring-blue-500"

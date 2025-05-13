@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,7 +15,7 @@ type AuthContextType = {
   session: Session | null;
   clientInfo: ClientInfo | null;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (emailOrUsername: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -29,13 +28,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Use setTimeout to prevent recursion issues
         if (currentSession?.user) {
           setTimeout(() => fetchClientInfo(), 0);
         } else {
@@ -44,7 +41,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
@@ -75,9 +71,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (emailOrUsername: string, password: string) => {
     try {
       setIsLoading(true);
+      
+      // Check if input is an email by looking for @ symbol
+      const isEmail = emailOrUsername.includes('@');
+      let email = emailOrUsername;
+      
+      // If username is provided, convert it to email format
+      if (!isEmail) {
+        email = `${emailOrUsername}@example.com`;
+      }
+      
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
